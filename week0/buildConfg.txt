@@ -1,0 +1,83 @@
+Derleme Yapılandırması (Build Configuration)
+Derleyicinizin kodunuzu hangi amaçla paketleyeceğini belirleyen ayarlardır. 
+Temelde iki mod vardır:
+Debug (Hata Ayıklama) Modu:Amacı: Kod yazarken ve hataları tespit ederken kullanılır.
+Özellikleri: Optimizasyon yapılmaz (-O0), koda ekstra hata ayıklama bilgileri eklenir (-ggdb).
+Sonuç: Dosya boyutu büyük ve yavaştır, ancak hataları adım adım takip etmek çok kolaydır.
+
+Release (Yayınlama) Modu:Amacı: Programı kullanıcılara sunarken veya performans testi yaparken kullanılır.
+Özellikleri: Debug bilgileri silinir (-DNDEBUG), derleyici kodu maksimum hız için optimize eder (-O2).
+Sonuç: Dosya boyutu çok küçüktür (örn. 65 KB $\rightarrow$ 12 KB) ve maksimum hızda çalışır.
+Özet Kural: Kod yazıp öğrenirken Debug modunu, projeyi tamamlayıp birine gönderirken veya performansını test ederken Release modunu 
+kullanmalısın.
+
+When you first ran your program, a new file called tasks.json was created under the .vscode folder in the explorer pane. Open the tasks.json file, find “args”, and then locate the line “${file}” within that section.
+Above the “${file}” line, add a new line containing the following command (one per line) when debugging:
+"-ggdb",
+Above the “${file}” line, add new lines containing the following commands (one per line) for release builds:
+"-O2",
+"-DNDEBUG",
+
+
+. Derleyici Uzantısı (Compiler Extension) Nedir?
+GCC veya Clang gibi derleyiciler, C++ standardında aslında olmayan ama yazılımcıların işini kolaylaştırmak için kendi ekledikleri 
+bazı "özel/esnek" kurallara izin verirler.
+
+Örneğin, C++ standardına göre dizi boyutları sabit olmak zorundadır. Ancak GCC derleyicisi sana torpil geçip değişken boyutlu 
+dizi oluşturmana izin verebilir.
+
+2. -pedantic-errors Parametresi Ne Yapar ve Gerek Var mı?
+Bu parametre derleyiciye şu emri verir: "Bana torpil geçme! C++ standardında ne yazıyorsa birebir onu uygula. 
+Standart dışı bir derleyici hilesi/uzantısı kullanırsam bana direkt HATA (Error) ver."
+
+Gerek var mı?
+Evet, öğrenme aşamasında kesinlikle eklemen tavsiye edilir.
+Çünkü farkında olmadan sadece GCC derleyicisine özel bir kod yazarsan, yarın bir gün o kod Visual Studio'da veya başka bir 
+derleyicide derlenmez ve "Kodum bende çalışıyordu, burada neden çalışmıyor?" diye saatlerce sebep ararsın. 
+Tamamen standart ve taşınabilir C++ öğrenmeni sağlar.
+
+3. "Insert Final Newline" Ayarı Nedir?
+C++ standardı, her kod dosyasının en sonunda boş bir alt satır (\n) olmasını şart koşar.
+
+VS Code varsayılan olarak dosya sonuna otomatik alt satır eklemeyebilir. Metindeki bu ayarı açarsan 
+(Files: Insert Final Newline), sen dosyayı her kaydettiğinde (Ctrl + S) VS Code dosyanın en altına çaktırmadan boş bir satır ekler.
+
+Özetle tasks.json Dosyan Nasıl Görünmeli?
+tasks.json dosyadaki "args" kısmına -pedantic-errors parametresini şu şekilde ekleyebilirsin:
+
+JSON
+"args": [
+    "-pedantic-errors", // Standart dışı C++ kullanımını engeller
+    "-std=c++17",       // Modern C++ standardı (isteğe bağlı ama önerilir)
+    "-ggdb",            // Debug bilgisi
+    "${file}",
+    "-o",
+    "${fileDirname}/${fileBasenameNoExtension}.exe"
+]
+Kısacası: Eklenti silmiyorsun; sadece derleyicinin "kafasına göre takılmasını" engelleyip saf C++ kurallarına uymasını sağlıyorsun.
+
+!! her proje için tekrar eklemeyi unutma
+
+
+#include <iostream>
+
+int main() {
+    int boyut = 10;
+    int dizi[boyut]; // <- Kritik satır burası!
+    
+    return 0;
+}
+1. -pedantic-errors Eklemediğinde (Varsayılan Hal)
+Ne Olur? GCC derleyicisi bu kodu hiçbir hata veya uyarı vermeden tıkır tıkır derler. Programın çalışır.
+
+Neden? Çünkü GCC derleyicisi sana kıyak geçer ve kendi içindeki özel bir esnekliği (Compiler Extension) devreye sokar.
+
+Tehlikesi Ne? C++ standardına göre dizi boyutları derleme anında sabit (const) olmak zorundadır.
+ Sen bu kodu yarın bir gün Visual Studio'da veya Clang derleyicisinde çalıştırmaya kalkarsan kod patlar.
+
+ W warning demek 
+ Wall unutulmuş deüişkenler hiç çalışmayacak kodlar gibi sık yapılan hataları yakalar
+ Wextra Wall ın kaçırdığı  extra şüpheli durumlar
+ Weffc++ kod yazma kurallarına uyup uymadıgına bakar
+ Wconersion , Wsign-conversion Sayıları birbirine dönüştürürken veri kaybı yaşanabilecekse uyarır
+ 

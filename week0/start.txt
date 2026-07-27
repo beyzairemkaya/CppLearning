@@ -1,0 +1,59 @@
+Dosya compiler tarafından bir amaç dosyasına (file.obj(windows) file.o(linux)) dönüştürülür
+sonra derleyici bu amaç dosyalarını ve varsa dış kütüphanleri girdi olarak alır
+linker öncelikle dosyanın çalıştırılabilir bir dosya olup olmadıgını yourumlar
+daha sonra dış bağımlıklıkları araştırır örneğin başka bir dosyada kulladığın bir fonksiyonu kullanman
+gerekiyorsa veya dış bir kütüohane bağımlılığın varsa
+En sonunda linker exe dosyasını oluşturur
+
+Önişlemci (Preprocessor): #include, #define gibi komutları genişletir.
+Derleyici (Compiler): C++ kodunu makine koduna çevirip .obj / .o dosyaları üretir.
+Bağlayıcı (Linker): Nesne dosyalarını, diğer modülleri ve kütüphaneleri birleştirerek .exe dosyasını basar.
+
+coğu c++ linkerı otomatik olarak c++ stand<rt libraryesini bağlar
+
+Statik bağlamada kütüphane kodları .exe dosyasının içine kopyalanır, 
+dinamik bağlamada ise kütüphane kodları dışarıda ayrı bir dosya olarak tutulur ve program çalıştırıldığı anda belleğe yüklenir.
+
+1. Statik Bağlama (Static Linking)
+Linker, kullandığın kütüphanenin kodlarını derleme aşamasında doğrudan senin .exe dosyanın içine gömer.
+
+Kullanılan Dosya Türleri: Windows'ta .lib, Linux/Mac'te .a (Archive)
+
+Avantajı: Taşınabilirlik. Oluşan .exe tamamen bağımsızdır. Uygulamayı başka bir bilgisayara taşırken yanında ekstra bir dosya götürmen gerekmez.
+
+Dezavantajı: .exe dosyasının boyutu büyür. Kütüphanede bir güncelleme veya hata düzeltmesi yapıldığında, 
+projenin tamamını yeniden derleyip bağlaman gerekir.
+
+2. Dinamik Bağlama (Dynamic Linking)
+Linker, kütüphanenin kodlarını .exe içine kopyalamaz. Bunun yerine .exe içine "Bu fonksiyon math.dll dosyasının içinde, 
+program çalışınca oradan çağır" şeklinde bir adres/referans tablosu koyar.
+
+Kullanılan Dosya Türleri: Windows'ta .dll, Linux'ta .so, Mac'te .dylib
+
+Avantajı: .exe boyutu çok daha küçüktür. Kütüphane güncellendiğinde .exe dosyasını tekrar derlemene gerek kalmaz, 
+sadece .dll dosyasını yenilemek yeterlidir. Ayrıca aynı .dll dosyası RAM üzerinde birden fazla program tarafından ortak kullanılabilir.
+
+Dezavantajı: Bir oyunu veya programı açarken karşılaştığın o meşhur "MSVCP140.dll bulunamadı" hatalarının tek sebebi budur. 
+.exe çalışırken ihtiyaç duyduğu .dll dosyasını sistemde bulamazsa açılmaz.
+
+Özetle, Yapı Otomasyon Araçları (Make, Ninja vb.):
+Sadece Değişeni Derler: Projedeki 1000 dosyadan sadece değiştirdiğin 1 dosyayı tespit edip derler. Her kod değişiminde saatlerce sıfırdan bekletmez.
+Bağımlılıkları Takip Eder: Bir dosya değiştiğinde, ondan etkilenen diğer tüm dosyaları senin yerine otomatik tespit edip derler.
+Tüm Süreci Otomatikleştirir: Derleme, otomatik testleri çalıştırma ve dosyaları paketleme adımlarını tek bir komutla sırayla çalıştırır.
+Kısacası: Yüzlerce C++ dosyasını ve derleme adımını elle yönetme ameleliğinden seni kurtaran akıllı derleme yöneticisidir.
+
+
+Geliştirme ortamlarının (IDE) projeyi ve ayarlarını kaydetme biçimleri farklıdır:
+Visual Studio projeyi .sln ve .vcxproj dosyalarıyla saklar.
+Code::Blocks projeyi .cbp dosyasıyla saklar.
+Dev-C++ projeyi .dev dosyasıyla saklar.
+Bu yüzden Visual Studio'da oluşturduğun bir proje klasörünü doğrudan Code::Blocks ile açamazsın.
+Önemli Ayrım: Yazdığın kod dosyaları (.cpp ve .h) her yerde aynıdır ve her IDE'de çalışır. 
+Ancak farklı bir IDE'ye geçtiğinde, yeni IDE'de baştan "Yeni Proje" oluşturup mevcut .cpp dosyalarını o projeye elle eklemen gerekir.
+
+Precompiled Header (PCH), C++ projelerinde derleme süresini ciddi şekilde hızlandıran bir performans ayarıdır.
+Sorun: C++'ta her .cpp dosyasının başına #include <iostream> veya #include <vector> yazdığında, derleyici o kütüphanenin binlerce satırlık kodunu her dosya için baştan okuyup derler. Projede 50 dosya varsa, <iostream> 50 kere sıfırdan derlenir.
+Çözüm (PCH): Sık kullanılan ve hiç değişmeyen bu kütüphaneleri sadece bir defa derleyip hazır bir dosya (.pch) olarak kaydeder.
+Sonuç: Diğer tüm dosyalar derlenirken derleyici bu hazır derlenmiş dosyayı kullanır ve aynı şeyleri tekrar tekrar derlemekle vakit kaybetmez.
+Analoji: Her yemek pişirişinde domatesleri sıfırdan yıkamak, soymak ve doğramak yerine; 
+gönceden doğranıp konserve yapılmış hazır domatesi yemeğe direkt atmak gibidir.

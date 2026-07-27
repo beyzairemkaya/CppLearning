@@ -1,0 +1,158 @@
+Statements
+Declaration statements: (int x;)
+Jump statements(return, break)
+Expression statements(std::cout << "Merhaba";, x=10;,++x;)
+Compound statements ({} içindekiler)
+Selection statements (conditionals)
+Iteration statements (loops)
+Try blocks
+
+Bir dosyaya sadece bir class yazıp kaydedebilirsin (dosya adı Ogrenci.cpp veya Ogrenci.h olabilir).
+Bu dosyayı tek başına derleyip bir .obj / nesne dosyasına dönüştürebilirsin.
+Ancak o sınıftan bir nesne üretip programı çalıştırmak (.exe yapmak) istediğin anda, 
+Linker (bağlayıcı) projenin bir yerinde main() fonksiyonunu arayacaktır.
+
+araba.cpp olsun bunda main yok saece class var ben araba.exe oluşturmam
+.exe (Executable / Çalıştırılabilir) dosyası, işletim sisteminin (Windows, Linux vb.) ekrana çift tıkladığında çalıştırabileceği nihai pakettir.
+İşletim sistemi bir .exe dosyasını çalıştırırken: "Bu programın başlangıç çizgisi neresi? İlk hangi satırı çalıştıracağım?" diye sorar.
+C++ dilinde bu "başlangıç çizgisi" istisnasız main() fonksiyonudur.
+Eğer araba.cpp dosyasında main() yoksa, Linker (Bağlayıcı) devreye girdiğinde şu ünlü hatayı verir:
+undefined reference to main (main fonksiyonu bulunamadı) ve derlemeyi iptal eder.
+Eğer araba.cpp dosyasında sadece class Araba { ... } varsa, derleyici bu dosyayı derlediğinde bir .exe değil, 
+araba.o (veya Windows'ta araba.obj) adında bir Nesne (Object) Dosyası oluşturur.
+bu .o dosyası makine kodudur ama içinde "çalıştır düğmesi" (main) olmadığı için tek başına çalıştırılamaz.
+
+Terminalden her iki dosyayı birlikte derlersin:
+g++ main.cpp araba.cpp -o araba.exe
+Linker, araba.o ile main.o dosyalarını birbirine bağlar ve ortaya araba.exe çıkar.
+
+In programming, the name of a function (or object, type, template, etc…) is called its identifier.
+
+
+Comment atarken fonksiyonların ne yaptıgını açıklıyabilirisn ama bir staament ın ne yaptıgını açıklamak kötü bir alışkanlıktır
+eğer açıklaman grekiyorsa kodu düzeltmen gerekiyordur 
+stament yorumlarken ne yaptıgınnı değil neden yaptıgını açıkla
+// Set sight range to 0
+sight = 0; değil
+// The player just drank a potion of blindness and can not see anything
+sight = 0; şeklinde olmalı
+// Calculate the cost of the items
+cost = quantity * 2 * storePrice; değil 
+// We need to multiply quantity by 2 here because they are bought in pairs
+cost = quantity * 2 * storePrice; şeklinde olmalı
+
+At the library, program, or function level, use comments to describe what.
+Inside the library, program, or function, use comments to describe how.
+At the statement level, use comments to describe why.
+
+Açıklamalar için her zaman // kullan: Kod içine not düşerken tek satırlı yorum tercih edersen, 
+ileride kod bloğunu /* ... */ arasına alarak kapatmak istediğinde iç içe yorum çakışması yaşamazsın.
+
+Karmaşık kod bloklarını kapatmak için #if 0 ... #endif kullan: İçinde zaten çok satırlı yorumlar olan büyük bir kod bloğunu 
+devre dışı bırakmanın en güvenli ve temiz yolu bu ön işlemci yönergesini kullanmaktır.
+
+int x=5; x değişken 5 literaldır literaller değiştirilemez değerlerdir.
+integer float boolena char strings ve null pointer literal(nullptr)
+Literally ("harfiyen / olduğu gibi") kelimesinden gelir. Kodda ne görüyorsan, bilgisayar onu tam olarak o ham değeriyle kabul eder.
+
+Bellekteki (RAM) veriyi tutan kutunun kendisine "Object" (Nesne), o kutunun üzerine yapıştırdığın etikete/isme ise "Variable" (Değişken) denir.
+Object (Nesne): Deponun içinde veri tutabilen fiziksel bir kutudur. RAM'de yer kaplar ve içinde bir değer barındırır.
+
+Variable (Değişken): O kutuyu sonradan kolayca bulabilmek için üzerine tükenmez kalemle yazdığın etikettir/isimdir (x, yas, skor gibi).
+nt x = 5;
+Object: RAM'de 5 sayısını tutan o 4 baytlık alanın kendisidir.
+Variable: O alana erişmek için verdiğimiz x ismidir.
+İsmi olduğu için buna hem bir Object hem de bir Variable deriz.
+2. İsimsiz Nesne (Anonymous / Temporary Object)
+İşte bu ikisinin neden farklı kavramlar olduğunu kanıtlayan durum burasıdır. C++'ta adı olmayan nesneler de vardır:
+
+C++
+std::cout << 5 + 3;
+Burada ne oluyor?
+Program 5 + 3 işlemini yapar ve sonuç olarak 8 bulur.
+Bu 8 değerini ekrana basmadan önce RAM'de bir anlığına tutmak için arka planda bir kutu (Object) oluşturur.
+Ekrana 8 basıldıktan hemen sonra bu kutu silinir.
+İşte o anlık oluşan 8 değeri RAM'de yer kapladığı için bir Object'tir. 
+Fakat ona int x veya int sonuc gibi bir isim vermediğimiz için o bir Variable DEĞİLDİR.
+
+C++'ta **Object (Nesne)**, RAM'de yer kaplayıp veri tutan bellek kutusudur; bu kutuya bir isim verdiğimizde ise o yapı bir 
+**Variable (Değişken)** haline gelir. Diğer bazı dillerin aksine C++, veri ile eylemi kesin çizgilerle ayırdığı için fonksiyonları 
+veri depolama alanı değil çalıştırılabilir talimat dizisi olarak görür ve **fonksiyonları nesne kabul etmez**. Özetle C++ dünyasında; 
+her değişken bir nesnedir, ismi olmayan geçici nesneler de bulunabilir ve eylem bildiren fonksiyonlar bu tanımın tamamen dışındadır.
+
+ramda alan declaration sırasında ayrılır
+Harika bir soru! `std::string` gibi boyutu önceden kestirilemeyen nesnelerde C++ iki farklı bellek bölgesini (**Stack** ve **Heap**) birlikte kullanarak bu durumu çözer.
+
+`std::string s;` tanımladığın an RAM'de ne kadar yer ayrılacağının cevabı iki aşamalıdır:
+
+---
+
+### 1. `std::string s;` Tanımlandığı An (Stack Bölgesi)
+
+Sen henüz içine hiçbir metin koymamış olsan bile, `std::string s;` dediğin anda **Stack** üzerinde **sabit bir alan** ayrılır.
+
+* 64-bit sistemlerde bu alan genelde **24 veya 32 bayttır** (derleyiciye göre değişir).
+* Bu 24-32 baytlık kutu, string'in **"Yönetici Kutusudur"**. İçinde şu bilgileri tutar:
+1. Metnin RAM'de nerede durduğunu gösteren bir adres (**Pointer** - 8 bayt)
+2. Metnin mevcut uzunluğu (**Size** - 8 bayt)
+3. Ayrılan maksimum kapasite (**Capacity** - 8 bayt)
+
+
+
+---
+
+### 2. İçine Metin Atandığında (Heap Bölgesi & SSO)
+
+İşte büyünün gerçekleştiği yer burasıdır! İçine metin yazdığında iki farklı senaryo çalışır:
+
+#### A) Metin Kısaysa: SSO (Small String Optimization)
+
+C++ derleyicileri çok zekidir. Kısa metinler için sürekli Heap'ten yer isteyip programı yavaşlatmak istemezler.
+
+* Eğer yazdığın metin kısaysa (genelde **15–22 karakterden azsa**), C++ bu metni **Stack'teki o ilk ayrılan 24-32 baytlık yönetici kutusunun içine** sıkıştırır.
+* **Sonuç:** Heap'ten 0 bayt ekstra yer ayrılır.
+
+#### B) Metin Uzunsa: Dinamik Bellek (Heap)
+
+Eğer 1000 karakterlik dev bir metin atarsan:
+
+```cpp
+std::string s = "Çok uzun bir metin..."; // 1000 karakter olsun
+
+```
+
+* **Stack'teki alan:** Yine aynı kalır (24-32 bayt değişmez).
+* **Heap'teki alan:** C++ gider **Heap** (dinamik bellek) bölgesinden **1000 baytlık** (veya performans için biraz daha fazlasını) yepyeni bir yer ister.
+* Stack'teki 24 baytlık yönetici kutusu, Heap'te açılan bu 1000 baytlık alanın adresini içine kaydeder.
+
+---
+
+### Görsel Mantık
+
+```text
+[ STACK (Sabit ~24 Bayt) ]
++------------------------------------+
+| Pointer  ->  Heap'teki adresi tutar| ---+
+| Size     ->  1000                  |    |
+| Capacity ->  1024                  |    |
++------------------------------------+    |
+                                          | (İşaret eder)
+                                          v
+[ HEAP (Dinamik Ayrılan Alan) ]
++-------------------------------------------------------+
+| "Çok uzun bir metin..........................." (1000 B)|
++-------------------------------------------------------+
+
+```
+
+---
+
+### Özet
+
+* `int x;` dediğinde Stack'te **direkt 4 bayt** ayrılır.
+* `std::string s;` dediğinde Stack'te **yönetim için sabit ~24-32 bayt** ayrılır.
+* Metin büyüdükçe Stack'teki yerin **değişmez**, C++ senin yerine arka planda **Heap** bölgesinden ihtiyaç duyulduğu kadar ekstra RAM kiralar.
+
+Statik/ dinamik bellek yönetimi dediğimiz olay bu
+
+allacotion ramda alan ayrımak demek
