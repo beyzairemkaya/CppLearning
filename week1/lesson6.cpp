@@ -56,6 +56,10 @@ int main()
 	std::cout << getValueFromUser() << '\n'; // where does the returned value get stored?
 
 	return 0;
-}*/
+}
+    */
+   // getValueFromUser fonkiyonundan return edilen değer temporary bir object iinde saklanır bu objectin scopu yoktur
+   // sırakı stamenta geçtiğinde silinir
+   // Return by value returns a temporary object (that holds a copy of the return value) to the caller.
 
 
