@@ -1,0 +1,26 @@
+yazılımcı profiler kullanarak algoritmalar , veri yapıları gibi yerlerde optimizasyon yaparken
+compiler low level yerlerde optimizasyon ypar örnn i=i*2 yi i<<=1 yapmak gibi (hangisinin daha iyi çalıştığı sisiteme özgü)
+optimizasyon modu debug kısmında sıkıntı çıkarabileceği için geliştirme ve debugging sürecinde kapalıdır release modunda açılır
+
+As-if" Kuralı (Görünürde Aynı Kuralı):
+C++ standardı derleyiciye büyük bir hareket alanı tanır: Derleyici, programın dışarıdan gözlemlenebilir davranışını (observable behavior) 
+değiştirmediği sürece koddaki ifadeleri değiştirebilir, sıralamasını kaydırabilir hatta gereksiz kodları tamamen silebilir.
+Tek İstisna (Copy/Move Elision): Derleyici, gereksiz bir nesne kopyalama veya taşıma işlemini silme hakkına sahiptir. 
+Nesnenin kopyalama kurucusu (copy constructor) içinde ekrana yazı basmak gibi gözlemlenebilir bir işlem olsa bile, 
+derleyici o kopyalamayı yok sayabilir.
+
+Ne Zaman Hangisini Seçmelisin?
+constexpr / Compile-Time Kullan:
+
+Sabitler ve Ön Hesaplamalar: Matematiksel sabitler, oyunlarda önceden hesaplanacak sinüs/cosinus veya fizik tabloları, faktöriyel/fibo hesapları.
+
+Yapısal Boyutlar: std::array boyutları, bit maskeleri, sabitleşmiş string/enum dönüşüm tabloları.
+
+Güvenlik ve Doğrulama: static_assert ile derleme anında kontrol edeceğin mantıksal kurallar.
+
+Normal / Runtime Kullan:
+
+Dış Veriler: Kullanıcı girdisi (std::cin), dosyadan/ağdan okunan veriler, veritabanı sorguları.
+
+Aşırı Ağır Hesaplamalar: Derleme süresini (build time) dakikalara veya saatlere çıkaracak kadar devasa algoritmalar.
+
